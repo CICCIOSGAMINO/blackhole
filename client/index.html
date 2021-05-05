@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- WebApp Config -->
+    <title>BlackHole - Peer2Peer Dropping Files</title>
+    <meta name="generator" content="lite(@cicciosgamino)">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#fff">
+    <meta name="color-scheme" content="dark light">
+
+    <!-- Description -->
+    <meta name="description" content="BlackHole - Peer2Peer Dropping Files WebApp">
+    <meta name="keywords" content="BlackHole, BlackHole Web,BlackHole WebApp, Peer2Peer Dropping Files, Open Source">
+    <meta name="author" content="@cicciosgamino">
+
+    <!-- Use relative path with base and rootPath -->
+    <base href="./">
+
+    <!-- Preload the Logo SVG -->
+    <link rel="preload" as="image" href="images/blackhole.svg">
+
+    <link rel="icon" href="images/favicon.ico">
+    <link id="favicon" rel="shortcut icon" href="images/favicon/favicon-16.png" sizes="16x16">
+    <link id="favicon" rel="shortcut icon" href="images/favicon/favicon-32.png" sizes="32x32">
+    <link id="favicon" rel="shortcut icon" href="images/favicon/favicon-64.png" sizes="64x64">
+    <link id="favicon" rel="shortcut icon" href="images/favicon/favicon-96.png" sizes="96x96">
+
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="BlackHole">
+    <link rel="icon" sizes="128x128" href="images/manifest/icon128x128.png">
+    <link rel="icon" sizes="192x192" href="images/manifest/icon192x192.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BlackHole">
+
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
+    <!-- Display on the MAC dock -->
+    <link rel="fluid-icon" type="image/png" href="images/manifest/icon-192x192.png">
+    
+
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#fff">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- OpenGraph Twitter / Facebook --> 
+    <meta property="og:title" content="BlackHole">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/CICCIOSGAMINO/blackhole">
+    <meta property="og:site_name" content="BlackHole">
+    <meta property="og:author" content="@cicciosgamino">
+    <meta property="og:description" content="BlackHole - Peer2Peer Dropping Files WebApp">
+    <meta property="og:image" content="images/manifest/icon-144x144.png" />
+
+    <!-- https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:author" content="@cicciosgamino">
+    <meta name="twitter:site" content="@cicciosgamino">
+    <meta name="twitter:description" content="BlackHole - Peer2Peer Dropping Files WebApp">
+
+    <!-- Resources -->
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+    <!-- Load and register pre-caching Service Worker -->
+    <script>
+      const baseUrl = document.querySelector('base').href;
+      console.log(`@URL >> ${baseUrl}`)
+
+      /* TODO
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register(baseUrl + 'service-worker.js', {
+            scope: '/'
+          });
+        });
+      }  */ 
+      
+    </script>
+
+    <!-- Material -->
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" as="style" type="text/css">
+
+    <!-- Add any global styles for body, document, etc. -->
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+    
+    <style>
+      @font-face {
+        font-family: 'Manrope';
+        /* font-style: normal; */
+        src: local('Manrope'), url('/fonts/Manrope-VariableFont_wght.ttf') format('truetype-variations');
+        /* The browser draws the text immediately in the fallback font if the font
+           isn't loaded, then swaps it with the webfont when it eventually loads
+           See: https://developers.google.com/web/updates/2016/02/font-display
+        */
+        font-display: swap;
+        font-weight: 1 999;
+      }
+
+      html {
+        margin: 0;
+        /* base rem unit (10px) */
+        font-size: 62.5%;
+
+        /* Material CSS Custom Properties https://material.io/develop/web/guides/typography
+          <STYLE>   headline1 ... headline6, subtitle1, subtitle2, body1, body2
+                    caption, button, overline
+        */
+        --mdc-typography-font-family: 'Manrope', sans-serif;
+        --mdc-typography-button-font-size: 2rem;
+
+        --my-color: #324FFF;
+        /* material design grey scale */ 
+        --md-grey-100: #F5F5F5;
+        --md-grey-300: #E0E0E0;
+        --md-grey-500: #959595;
+        --md-grey-700: #616161;
+        --md-grey-900: #212121;
+      }
+
+      body {
+        margin: 0;
+        /* This is a font-stack that tries to use the system-default sans-serifs first */
+        font-family: 'Manrope', sans-serif;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      black-hole:not([dark]) {
+        /* custom vars light theme */ 
+        --mdc-theme-primary: var(--my-color);
+        --mdc-theme-primary-variant: #283198;
+        --mdc-theme-secondary: #00e8ff;
+        --mdc-theme-secondary-variant: #00FFFF;
+
+        --mdc-theme-background: whitesmoke;
+        --mdc-theme-surface: whitesmoke;
+        --mdc-theme-on-primary: whitesmoke;
+        --mdc-theme-on-second: #000;
+        --mdc-theme-on-background: #000;
+        --mdc-theme-on-surface: #000;
+
+        --mdc-error: #B00020;
+        --mdc-onerror: #FFFFFF;
+      }
+
+      black-hole[dark] {
+        /* custom vars dark theme */ 
+        --mdc-theme-primary: var(--my-color);
+        --mdc-theme-primary-variant: #283198;
+        --mdc-theme-secondary: #00e8ff;
+        --mdc-theme-secondary-variant: #00FFFF;
+
+        --mdc-theme-background: var(--md-grey-900);
+        --mdc-theme-surface: var(--md-grey-900);
+        --mdc-theme-on-primary: var(--md-grey-900);
+        --mdc-theme-on-second: whitesmoke;
+        --mdc-theme-on-background: whitesmoke;
+        --mdc-theme-on-surface: whitesmoke;
+      }
+
+      /* styling for rendering while resources are loading  TEXT-VERSION
+      black-hole[unresolved] {
+        display: block;
+        min-height: 101vh;
+        line-height: 68px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        color: #f5f5f5;
+        padding: 0 16px;
+        overflow: visible;
+      } */ 
+
+      /* styling for rendering while resources are laoding   GIF-VERSION */
+      black-hole[unresolved] {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('../images/blackhole.svg') center/340px no-repeat;
+        margin-top: -120px;
+      }
+    </style>
+  </head>
+  <body>
+    <black-hole unresolved title="BlackHole"></black-hole>
+
+    <noscript>
+      <h1>Enable JavaScript</h1>
+      <h3>BlackHole NEED Javascript to works!!!</h3>
+    </noscript>
+    <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs 
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> --> 
+
+    <script type="module" src="./black-hole.js" crossorigin></script>
+
+    <!-- listen for prefers-color-scheme: dark media query -->
+    <script>
+
+      // Check if dark mode is supported by browser
+      if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
+        // supported
+        console.log('@DARK-MODE >> Supported 🎉')
+        window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+        const blackHole = document.querySelector('black-hole')
+        const darkModeOn = e.matches;
+        darkModeOn ? 
+          blackHole.setAttribute('dark', ``) : 
+          blackHole.removeAttribute('dark')
+        
+        console.log(`Dark mode is ${darkModeOn ? '🌒 on' : '☀🌕 off'}.`)
+      })
+      } else {
+        console.log('@DARK-MODE >> NOT Supported ⛔')
+      }
+    </script>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', (event) => {
+        // Console a Welcome message for Developers 
+        console.log(
+          `%c %cBlackH0le \n%cPeer2Peer Dropping Files WebApp`,
+          `padding: 37px 33px 15px; background:url(${baseUrl}images/manifest/icon96x96.png) no-repeat;background-size:cover;`,
+          `font-size: 32px; color: #000;`,
+          `padding: 10px 0px 0px 0px; font-size: 16px; color: #212121;`
+        );
+
+        document.querySelector('black-hole').removeAttribute('unresolved')
+      })
+    </script>
+
+</body>
+</html>

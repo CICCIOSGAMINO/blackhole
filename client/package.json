@@ -1,0 +1,23 @@
+{
+  "name": "blackhole-webapp",
+  "version": "1.0.0",
+  "description": "WebApp of Blackhole peer2peer dropping image, video, files web-portal.",
+  "main": "black-hole.js",
+  "repository": "https://github.com/CICCIOSGAMINO/blackhole.git",
+  "author": "@cicciosgamino <marco.canali@gmail.com>",
+  "license": "Apache-2.0",
+  "scripts": {
+    "serve": "wds --node-resolve --watch --app-index index.html"
+  },
+  "private": false,
+  "dependencies": {
+    "@material/mwc-icon": "^0.21.0",
+    "@material/mwc-icon-button": "^0.21.0",
+    "@material/mwc-linear-progress": "0.21.0",
+    "@material/mwc-snackbar": "^0.21.0",
+    "lit": "*"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.1.17"
+  }
+}
