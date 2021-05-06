@@ -3,6 +3,16 @@ import { LitElement, html, css } from 'lit'
 /* components */
 import { PendingContainer } from './components/pending-container'
 import { lazyLoad } from './components/lazy-load'
+import { BlkPeers } from './components/blk-peers'
+import { NoPeers } from './components/no-peers'
+import { BlkMessage } from './components/blk-message'
+import { BlkFooter } from './components/blk-footer'
+import { BlkDialog } from './components/blk-dialog'
+import { BlkToast } from './components/blk-toast'
+import { BlkAbout } from './components/blk-about'
+
+/* Js Class */
+import { ServerConnection } from './components/server-connection'
 
 /* Material */
 import '@material/mwc-icon'
@@ -18,6 +28,29 @@ class BlackHole extends PendingContainer(LitElement) {
   #callbackGoingOnline
   #callbackGoingOffline
   #callbackMaxInnerWidth
+
+  // connection stuff
+  #server
+  #peers
+  // styles
+  static get styles () {
+    return [
+      sharedStyles,
+      css`
+      [hidden] { 
+        display: none !important; 
+      }
+
+      :host {
+        display: block;
+        background: linear-gradient(
+          to bottom right, var(--mdc-theme-background), var(--my-color));
+      }
+
+      /* All elements interested have online / offline class */
+      `
+    ]
+  }
   // properties
   static get properties () {
     return {
@@ -40,6 +73,9 @@ class BlackHole extends PendingContainer(LitElement) {
     this.#callbackMaxInnerWidth = this.#handleMaxInnerWidth.bind(this)
     this.#callbackGoingOnline = this.#goingOnline.bind(this)
     this.#callbackGoingOffline = this.#goingOffline.bind(this)
+
+    // connection stuff
+    this.#server = new ServerConnection()
   }
 
   connectedCallback () {
@@ -64,25 +100,6 @@ class BlackHole extends PendingContainer(LitElement) {
     window.removeEventListener('offline', this.#callbackGoingOffline)
 
     super.disconnectedCallback()
-  }
-
-  static get styles () {
-    return [
-      sharedStyles,
-      css`
-      [hidden] { 
-        display: none !important; 
-      }
-
-      :host {
-        display: block;
-        background: linear-gradient(
-          to bottom right, var(--mdc-theme-background), var(--my-color));
-      }
-
-      /* All elements interested have online / offline class */
-      `
-    ]
   }
 
   // handle back online
@@ -133,19 +150,28 @@ class BlackHole extends PendingContainer(LitElement) {
       <!-- Main -->
       <main>
 
-      <!-- Progress Bar for Async tasks -->
-      <mwc-linear-progress 
-        indeterminate 
-        .closed="${!this.hasPendingChildren}">
-      </mwc-linear-progress>
+        <!-- Progress Bar for Async tasks -->
+        <mwc-linear-progress 
+          indeterminate 
+          .closed="${!this.hasPendingChildren}">
+        </mwc-linear-progress>
 
-      <!-- Main Content -->
+        <!-- Main Content -->
+        <no-peers></no-peers>
+        <blk-peers></blk-peers>
+        <blk-message></blk-message>
 
       </main>
 
+      <blk-footer></blk-footer>
+
+      <blk-dialog></blk-dialog>
+      <blk-toast></blk-toast>
+      <blk-about></blk-about>
+
       <!-- Snackbar -->
       <mwc-snackbar>
-         <mwc-icon-button icon="close" slot="dismiss"></mwc-icon-button>
+         <mwc-icon-button icon="close" slot="dismiss" stacked></mwc-icon-button>
       </mwc-snackbar>
     `
   }
