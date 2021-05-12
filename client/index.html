@@ -22,7 +22,7 @@
     <base href="./">
 
     <!-- Preload the Logo SVG -->
-    <link rel="preload" as="image" href="images/blackhole.svg">
+    <link rel="preload" as="image" href="images/blkhole.svg">
 
     <link rel="icon" href="images/favicon.ico">
     <link id="favicon" rel="shortcut icon" href="images/favicon/favicon-16.png" sizes="16x16">
@@ -138,7 +138,7 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      black-hole:not([dark]) {
+      blk-hole:not([dark]) {
         /* custom vars light theme */ 
         --mdc-theme-primary: var(--my-color);
         --mdc-theme-primary-variant: #283198;
@@ -156,7 +156,7 @@
         --mdc-onerror: #FFFFFF;
       }
 
-      black-hole[dark] {
+      blk-hole[dark] {
         /* custom vars dark theme */ 
         --mdc-theme-primary: var(--my-color);
         --mdc-theme-primary-variant: #283198;
@@ -172,7 +172,7 @@
       }
 
       /* styling for rendering while resources are loading  TEXT-VERSION
-      black-hole[unresolved] {
+      blk-hole[unresolved] {
         display: block;
         min-height: 101vh;
         line-height: 68px;
@@ -186,19 +186,19 @@
       } */ 
 
       /* styling for rendering while resources are laoding   GIF-VERSION */
-      black-hole[unresolved] {
+      blk-hole[unresolved] {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('../images/blackhole.svg') center/340px no-repeat;
+        background: url('../images/blkhole.svg') center/340px no-repeat;
         margin-top: -120px;
       }
     </style>
   </head>
   <body>
-    <black-hole unresolved title="BlackHole"></black-hole>
+    <blk-hole unresolved title="BlackHole"></blk-hole>
 
     <noscript>
       <h1>Enable JavaScript</h1>
@@ -207,7 +207,7 @@
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs 
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> --> 
 
-    <script type="module" src="./black-hole.js" crossorigin></script>
+    <script type="module" src="./blk-hole.js" crossorigin></script>
 
     <!-- listen for prefers-color-scheme: dark media query -->
     <script>
@@ -217,11 +217,11 @@
         // supported
         console.log('@DARK-MODE >> Supported 🎉')
         window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
-        const blackHole = document.querySelector('black-hole')
+        const blkHole = document.querySelector('blk-hole')
         const darkModeOn = e.matches;
         darkModeOn ? 
-          blackHole.setAttribute('dark', ``) : 
-          blackHole.removeAttribute('dark')
+          blkHole.setAttribute('dark', ``) : 
+          blkHole.removeAttribute('dark')
         
         console.log(`Dark mode is ${darkModeOn ? '🌒 on' : '☀🌕 off'}.`)
       })
@@ -240,7 +240,7 @@
           `padding: 10px 0px 0px 0px; font-size: 16px; color: #212121;`
         );
 
-        document.querySelector('black-hole').removeAttribute('unresolved')
+        document.querySelector('blk-hole').removeAttribute('unresolved')
       })
     </script>
 

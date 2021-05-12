@@ -13,6 +13,7 @@ import { BlkAbout } from './components/blk-about'
 
 /* Js Class */
 import { ServerConnection } from './components/server-connection'
+import { RTCPeer } from './components/RTCPeer'
 
 /* Material */
 import '@material/mwc-icon'
@@ -23,16 +24,12 @@ import '@material/mwc-linear-progress'
 /* shared styles */
 import { sharedStyles } from './styles/shared-styles.js'
 
-class BlackHole extends PendingContainer(LitElement) {
-  // private fields and methods
+class BlkHole extends PendingContainer(LitElement) {
+  #callbackMaxInnerWidth
   #callbackGoingOnline
   #callbackGoingOffline
-  #callbackMaxInnerWidth
-
-  // connection stuff
-  #server
   #peers
-  // styles
+  #server
   static get styles () {
     return [
       sharedStyles,
@@ -67,15 +64,24 @@ class BlackHole extends PendingContainer(LitElement) {
     this.maxInnerWidth = 800
     this.offline = !navigator.onLine
     this.hasPendingChildren = false
-
     // define the callback before bind to this here is why
     // >> https://github.com/tc39/proposal-private-methods/issues/11
     this.#callbackMaxInnerWidth = this.#handleMaxInnerWidth.bind(this)
     this.#callbackGoingOnline = this.#goingOnline.bind(this)
     this.#callbackGoingOffline = this.#goingOffline.bind(this)
 
-    // connection stuff
+    this.#peers = {}
     this.#server = new ServerConnection()
+
+    this.addEventListener('signal', e => this.#onMessage(e.detail))
+    this.addEventListener('peers', e => this.#onPeers(e.detail))
+    this.addEventListener('files-selected', this.#onFilesSelected)
+    this.addEventListener('send-text', this.#onSendText)
+
+    this.addEventListener('peer-joined', e => this.#onPeerJoined(e.detail))
+    this.addEventListener('peer-left', e => this.#onPeerLeft(e.detail))
+    this.addEventListener('file-progress', e => this.#onFileProgress(e.detail))
+    this.addEventListener('paste', e => this.#onPaste(e.detail))
   }
 
   connectedCallback () {
@@ -145,6 +151,63 @@ class BlackHole extends PendingContainer(LitElement) {
     this.dispatchEvent(event)
   }
 
+  #onMessage (msg) {
+    if (!this.#peers[msg.sender]) {
+      // create the RTC Peer
+      this.#peers[msg.sender] = new RTCPeer(this.#server)
+    }
+    this.#peers[msg.sender].onServerMsg(msg)
+  }
+
+  #onPeers (peers) {
+    peers.forEach(peer => {
+      if (this.#peers[peer.id]) {
+        console.log(`@PEER (${peer.id}) >> Updated`)
+      }
+      if (window.RTCPeerConnection) {
+        // Use the RTC connection
+        this.#peers[peer.id] = new RTCPeer(this.#server, peer.id)
+      } else {
+        // TODO Use the WebSocket connection
+        console.log('@WS >> WebSocket connection needed!')
+      }
+    })
+  }
+
+  sendTo (peerId, msg) {
+    this.#peers[peerId].send(msg)
+  }
+
+  #onFilesSelected (msg) {
+    this.#peers[msg.to].sendFiles(msg.files)
+  }
+
+  #onSendText (msg) {
+    this.#peers[msg.to].sendText(msg.text)
+  }
+
+  #onPeerLeft (peerId) {
+    const peer = this.#peers[peerId]
+    delete this.#peers[peerId]
+    peer.close()
+  }
+
+  #onPeerJoined (peer) {
+    // return if already present
+    if (this.renderRoot.querySelector(`#${peer.id}`)) return
+    // create the peer
+    // TODO
+    const blkPeer = new BlkPeer(peer)
+  }
+
+  #onFileProgress () {
+
+  }
+
+  #onPaste () {
+    
+  }
+
   render () {
     return html`
       <!-- Main -->
@@ -157,6 +220,7 @@ class BlackHole extends PendingContainer(LitElement) {
         </mwc-linear-progress>
 
         <!-- Main Content -->
+        <peers-ui><peers-ui>
         <no-peers></no-peers>
         <blk-peers></blk-peers>
         <blk-message></blk-message>
@@ -177,4 +241,4 @@ class BlackHole extends PendingContainer(LitElement) {
   }
 }
 
-window.customElements.define('black-hole', BlackHole)
+window.customElements.define('blk-hole', BlkHole)
