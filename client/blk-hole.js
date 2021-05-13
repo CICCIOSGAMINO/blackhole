@@ -1,17 +1,14 @@
 import { LitElement, html, css } from 'lit'
 
 /* components */
-import { PendingContainer } from './components/pending-container'
-import { lazyLoad } from './components/lazy-load'
-import { BlkPeers } from './components/blk-peers'
-import { NoPeers } from './components/no-peers'
-import { BlkMessage } from './components/blk-message'
+import { BlkPeer } from './components/blk-peer'
 import { BlkFooter } from './components/blk-footer'
 import { BlkDialog } from './components/blk-dialog'
 import { BlkToast } from './components/blk-toast'
 import { BlkAbout } from './components/blk-about'
 
 /* Js Class */
+import { PendingContainer } from './components/pending-container'
 import { ServerConnection } from './components/server-connection'
 import { RTCPeer } from './components/RTCPeer'
 
@@ -23,6 +20,14 @@ import '@material/mwc-linear-progress'
 
 /* shared styles */
 import { sharedStyles } from './styles/shared-styles.js'
+
+/**
+ * @typedef {{
+ *  id: string;
+ *  name: string;
+ *  device: string;
+ * }} Peer
+ */
 
 class BlkHole extends PendingContainer(LitElement) {
   #callbackMaxInnerWidth
@@ -54,7 +59,12 @@ class BlkHole extends PendingContainer(LitElement) {
       title: String,
       offline: Boolean,
       dark: Boolean,
-      hasPendingChildren: Boolean
+      hasPendingChildren: Boolean,
+      peer: Object,
+      peers: {
+        type: Array,
+        attribute: false
+      }
     }
   }
 
@@ -64,16 +74,24 @@ class BlkHole extends PendingContainer(LitElement) {
     this.maxInnerWidth = 800
     this.offline = !navigator.onLine
     this.hasPendingChildren = false
+    // This Peer set
+    this.peer = {
+      id: 'ciccio5522',
+      name: 'Cicciosgamino-Peer',
+      device: 'linux'
+    }
+    // peers [{ id: '', name: '', device: '' }]
+    this.peers = []
     // define the callback before bind to this here is why
     // >> https://github.com/tc39/proposal-private-methods/issues/11
     this.#callbackMaxInnerWidth = this.#handleMaxInnerWidth.bind(this)
     this.#callbackGoingOnline = this.#goingOnline.bind(this)
     this.#callbackGoingOffline = this.#goingOffline.bind(this)
 
-    this.#peers = {}
     this.#server = new ServerConnection()
 
-    this.addEventListener('signal', e => this.#onMessage(e.detail))
+    // signal coming from server
+    this.addEventListener('signal', e => this.#onMessageFromServer(e.detail))
     this.addEventListener('peers', e => this.#onPeers(e.detail))
     this.addEventListener('files-selected', this.#onFilesSelected)
     this.addEventListener('send-text', this.#onSendText)
@@ -151,11 +169,14 @@ class BlkHole extends PendingContainer(LitElement) {
     this.dispatchEvent(event)
   }
 
-  #onMessage (msg) {
+  #onMessageFromServer (msg) {
+    // DEBUG msg from server in BlkHome peer manger
+    console.log(`@BLK-HOME (Msg from server) >> ${msg}`)
     if (!this.#peers[msg.sender]) {
       // create the RTC Peer
       this.#peers[msg.sender] = new RTCPeer(this.#server)
     }
+    // call onServerMsg method on the Peer
     this.#peers[msg.sender].onServerMsg(msg)
   }
 
@@ -210,20 +231,22 @@ class BlkHole extends PendingContainer(LitElement) {
 
   render () {
     return html`
+
+      <!-- Progress Bar for Async tasks -->
+      <mwc-linear-progress 
+        indeterminate 
+        .closed="${!this.hasPendingChildren}">
+      </mwc-linear-progress>
+
       <!-- Main -->
       <main>
 
-        <!-- Progress Bar for Async tasks -->
-        <mwc-linear-progress 
-          indeterminate 
-          .closed="${!this.hasPendingChildren}">
-        </mwc-linear-progress>
+        ${this.peers.map(p => html`
+          <blk-peer .id=${p.id} .name=${p.name} .device=${p.device}></blk-peer>
+        `)}
 
-        <!-- Main Content -->
-        <peers-ui><peers-ui>
-        <no-peers></no-peers>
-        <blk-peers></blk-peers>
-        <blk-message></blk-message>
+        <!-- User Peer -->
+        <blk-peer .id=${this.peer.id} .name=${this.peer.name} .device=${this.peer.device}><blk-peer>
 
       </main>
 

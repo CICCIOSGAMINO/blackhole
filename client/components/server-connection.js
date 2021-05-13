@@ -8,7 +8,7 @@ export class ServerConnection {
     // this.#endpoint()  ws://127.0.0.1:8080/server/webrtc
     if (this.#isConnected() || this.#isConnecting()) return
     this.#ws = new WebSocket(this.#endpoint())
-    this.#ws.binaryType = 'arrayBuffer'
+    this.#ws.binaryType = 'arraybuffer'
     this.#ws.addEventListener('open', () => {
       console.log(`@WS >> Connected to ${this.#endpoint()}`)
     })

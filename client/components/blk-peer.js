@@ -1,23 +1,21 @@
 import { LitElement, html, css } from 'lit'
 
-class BlkPeer extends LitElement {
-
+export class BlkPeer extends LitElement {
+  #touchTimer
   static get properties () {
     return {
+      id: String,
       name: String,
       device: String,
-      progress: Number
+      progress: Number,
     }
   }
 
-  constructor (peer) {
-    this.#peer = peer
+  constructor () {
+    super()
     // set the icon
     this.#setIcon()
-  }
 
-  connectedCallback () {
-    // set some listeners
     this.addEventListener('drop', this.#onDrop)
     this.addEventListener('dragend', this.#onDragEnd)
     this.addEventListener('dragleave', this.#onDragEnd)
@@ -25,15 +23,23 @@ class BlkPeer extends LitElement {
     this.addEventListener('contextmenu', this.#onRightClick)
     this.addEventListener('touchstart', this.#onTouchStart)
     this.addEventListener('touchend', this.#onTouchEnd)
+  }
 
+  connectedCallback () {
+    super.connectedCallback()
     // prevent browser's default file drop behavior
     window.addEventListener('dragover', e => e.preventDefault())
     window.addEventListener('drop', e => e.preventDefault())
   }
 
+  disconnectedCallback () {
+    window.removeEventListener('dragover')
+    window.removeEventListener('drop')
+    super.disconnectedCallback()
+  }
+
   #setIcon () {
-    const device = this.#peer.name.device || this.#peer.name
-    switch (device.type) {
+    switch (this.device) {
       case 'mobile':
         this.device = '#phone-iphone'
         break
@@ -51,7 +57,7 @@ class BlkPeer extends LitElement {
     const files = event.target.files
     const ce = new CustomEvent('files-selected', {
       files: files,
-      to: this.#peer.id
+      to: this.peer.id
     })
     this.dispatchEvent(ce)
     // reset input
@@ -67,7 +73,7 @@ class BlkPeer extends LitElement {
     const files = event.dataTransfer.files
     const ce = new CustomEvent('files-selected', {
       files: files,
-      to: this.#peer.id
+      to: this.peer.id
     })
     this.dispatchEvent(ce)
   }
@@ -75,27 +81,35 @@ class BlkPeer extends LitElement {
   #onRightClick (event) {
     event.preventDefault()
     const ce = new CustomEvent('text-recipient', {
-      to: this.#peer.id
+      to: this.peer.id
     })
     this.dispatchEvent(ce)
   }
 
   #onTouchStart (event) {
-    this.#touchStart = Date.now()
+    this.#onTouchStart = Date.now()
     this.#touchTimer = setTimeout(_ => this.#onTouchEnd(), 610)
   }
 
   #onTouchEnd (event) {
-    if (Date.now() - this.#touchStart < 500) {
+    if (Date.now() - this.#onTouchStart < 500) {
       clearTimeout(this.#touchTimer)
     } else {
       // this is a long tap
       if (event) event.preventDefault()
       const ce = new CustomEvent('text-recipient', {
-        to: this.#peer.id
+        to: this.id
       })
       this.dispatchEvent(ce)
     }
+  }
+
+  #onDragEnd () {
+
+  }
+
+  #onDragOver () {
+
   }
 
   render () {
