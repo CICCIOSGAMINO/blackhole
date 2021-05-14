@@ -45,8 +45,22 @@ class BlkHole extends PendingContainer(LitElement) {
 
       :host {
         display: block;
+        min-height: 100vh;
+        min-width: 100vw;
+
         background: linear-gradient(
           to bottom right, var(--mdc-theme-background), var(--my-color));
+      }
+
+      /* Absolute position the local peer */
+      .local-peer {
+        width: 200px;
+        position: absolute;
+        bottom: 10rem;
+        left: 0; 
+        right: 0; 
+        margin-left: auto; 
+        margin-right: auto; 
       }
 
       /* All elements interested have online / offline class */
@@ -241,20 +255,34 @@ class BlkHole extends PendingContainer(LitElement) {
       <!-- Main -->
       <main>
 
-        ${this.peers.map(p => html`
-          <blk-peer .id=${p.id} .name=${p.name} .device=${p.device}></blk-peer>
-        `)}
+        <!-- Remote Peers -->
+        <section>
 
-        <!-- User Peer -->
-        <blk-peer .id=${this.peer.id} .name=${this.peer.name} .device=${this.peer.device}><blk-peer>
+          ${this.peers.map(p => html`
+            <blk-peer .id=${p.id} .name=${p.name} .device=${p.device}></blk-peer>
+          `)}
+
+        </section>
+
+        <!-- Local Peer -->
+        <section>
+
+          <blk-peer
+            class="local-peer"
+            .id=${this.peer.id} 
+            .name=${this.peer.name} 
+            .device=${this.peer.device}>
+          <blk-peer>
+
+        </section>
 
       </main>
 
-      <blk-footer></blk-footer>
 
-      <blk-dialog></blk-dialog>
-      <blk-toast></blk-toast>
-      <blk-about></blk-about>
+      <!-- <blk-footer></blk-footer> -->
+      <!-- <blk-dialog></blk-dialog> --> 
+      <!-- <blk-toast></blk-toast> -->
+      <!-- <blk-about></blk-about> -->
 
       <!-- Snackbar -->
       <mwc-snackbar>

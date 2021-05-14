@@ -2,6 +2,15 @@ import { LitElement, html, css } from 'lit'
 
 export class BlkPeer extends LitElement {
   #touchTimer
+  static get styles () {
+    return css`
+      :host {
+        display: block;
+        background-color: red;
+      }
+    `
+  }
+
   static get properties () {
     return {
       id: String,
@@ -53,7 +62,7 @@ export class BlkPeer extends LitElement {
   }
 
   #onFileSelected (event) {
-    const input = renderRoot.querySelector('input')
+    const input = this.renderRoot.querySelector('input')
     const files = event.target.files
     const ce = new CustomEvent('files-selected', {
       files: files,
@@ -114,17 +123,11 @@ export class BlkPeer extends LitElement {
 
   render () {
     return html`
+      
       <label for="drop" title="Click to send the files or right click to send a text">
         <input @change=${this.#onFileSelected} name="drop" type="file" multiple>
         <p>Icon Device: ${this.device}</p>
       </label>
-      <div class="progress"> Progress: ${this.progress}
-        <div class="circle">Circle</div>
-        <div class="circle right">Cirlce Right</div>
-      </div>
-      <div class="name"></div>
-      <div class="device-name"></div>
-      <div class="status"></div>
     `
   }
 }
